@@ -1,0 +1,116 @@
+<html>
+
+<head>
+    <script type="text/javascript">
+        function loaded() {
+            console.log("Loaded");
+            generateTimeline();
+        }
+        function generateTimeline() {
+            let elements = ["Jan 1st", "Jan 2nd", "Jan 3rd", "Jan 4th"];
+            //generate CSS for elements.
+            let cssString = '';
+            cssString += ".timeline{display: grid; grid-template-columns:30% 1% 30%;"
+            tempRows = calculateTemplateRows(elements.length);
+            cssString += "grid-template-rows:" + tempRows;
+            cssString += "}";
+            for (let x = 0; x < elements.length; x++) {
+                //calculate row pos;
+                let pos = x + 1;
+                let rowPos = pos + "/" + (pos + 1);
+                let colPos = "1/2";
+                let alignment = "right";
+                if (pos % 2 == 0) {
+                    colPos = "3/4";
+                    alignment = "left";
+                }
+                cssString += ".t" + (x + 1) + "{ text-align:" + alignment + ";padding:10;grid-column:" + colPos + ";grid-row:" + rowPos + ";}";
+            }
+            console.log(cssString);
+            //generate HTML for elements
+        }
+        function calculateTemplateRows(count) {
+            returnStr = ''; //need to double check on string immutibility in js.
+            let percent = 100 / count;
+            console.log(percent);
+            for (let x = 0; x < count; x++) {
+                returnStr += percent + "% ";
+            }
+            returnStr += ";";
+            return returnStr;
+        }
+    </script>
+    <style>
+        /* .timeline{
+            display: grid;
+            grid-template-columns: 30% 30% 30%;
+            grid-template-rows: auto;
+        }
+        .timelineEntry{
+            grid-column: 1/2;
+        }
+         */
+        .timeline {
+            display: grid;
+            grid-template-columns: 30% 1% 30%;
+            grid-template-rows: 25% 25% 25% 25%;
+        }
+
+        .t1 {
+            text-align: right;
+            padding: 10;
+            grid-column: 1/2;
+            grid-row: 1/2;
+        }
+
+        .t2 {
+            text-align: left;
+            padding: 10;
+            grid-column: 3/4;
+            grid-row: 2/3;
+        }
+
+        .t3 {
+            text-align: right;
+            padding: 10;
+            grid-column: 1/2;
+            grid-row: 3/4;
+        }
+
+        .t4 {
+            text-align: left;
+            padding: 10;
+            grid-column: 3/4;
+            grid-row: 4/5;
+        }
+
+        .bar {
+            grid-column: 2/3;
+            grid-row: 1/5;
+            border-radius: 10px;
+            background-color: red;
+        }
+    </style>
+</head>
+
+<body onload="loaded()">
+    <div class="timeline">
+        <div class="bar"></div>
+        <div class="t1">
+            January 1st
+        </div>
+        <div class="t2">
+            January 2st
+        </div>
+        <div class="t3">
+            January 3st
+        </div>
+        <div class="t4">
+            January 4st
+        </div>
+
+    </div>
+
+</body>
+
+</html>
