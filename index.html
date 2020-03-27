@@ -2,22 +2,37 @@
 
 <head>
     <script type="text/javascript">
+        class TimeElement {
+            constructor(dateTime, content) {
+                this.date = dateTime;
+                this.content = content;
+            }
+        }
         function loaded() {
             console.log("Loaded");
             generateTimeline();
         }
         function generateTimeline() {
-            let elements = ["Jan 1st", "Jan 2nd", "Jan 3rd", "Jan 4th"];
+
+            let elements = [new TimeElement(new Date("2018-01-02"), "I went on a walk"), new TimeElement(new Date("2018-02-02"), "Ate banana again"), new TimeElement(new Date("2018-03-03"), "I fed a dog"), new TimeElement(new Date("2018-04-04"), "I ate a banana")];
+            //get range of years
+            let earliest = elements[elements.length - 1].date.getFullYear();
+            let latest = elements[0].date.getFullYear();
+            let range = latest - earliest + 1;
+            console.log(range);
             //generate CSS for elements.
             let cssString = '';
-            cssString += ".timeline{display: grid; grid-template-columns:30% 1% 30%;"
-            tempRows = calculateTemplateRows(elements.length);
+            cssString += ".timeline{height:50vh;display: grid; grid-template-columns:30% 1% 30%;"
+            tempRows = calculateTemplateRows(range);
             cssString += "grid-template-rows:" + tempRows;
             cssString += "}";
             for (let x = 0; x < elements.length; x++) {
                 //calculate row pos;
                 let pos = x + 1;
-                let rowPos = pos + "/" + (pos + 1);
+                let calculatedRow = (latest - elements[x].date.getFullYear()) * 12 + (12 - elements[x].date.getMonth());
+
+                let rowPos = (calculatedRow + 1) + "/" + (calculatedRow + 2);
+                console.log(elements[x].date + " " + rowPos);
                 let colPos = "1/2";
                 let alignment = "right";
                 if (pos % 2 == 0) {
@@ -28,12 +43,23 @@
             }
             console.log(cssString);
             //generate HTML for elements
+            let htmlString = '';
+
+            for (let x = 0; x < elements.length; x++) {
+                let templatedString = `<div class="t${x+1}">
+                                        ${elements[x].date.toLocaleDateString("en-US")}
+                                      </div>`;
+                htmlString += templatedString;
+            }
+            document.getElementById("timeline").innerHTML += htmlString;
         }
-        function calculateTemplateRows(count) {
+        /// 
+        /// Calculate number of rows needed by total number of years displayed.
+        function calculateTemplateRows(years) {
             returnStr = ''; //need to double check on string immutibility in js.
-            let percent = 100 / count;
+            let percent = 100 / (years * 12);
             console.log(percent);
-            for (let x = 0; x < count; x++) {
+            for (let x = 0; x < (years * 12); x++) {
                 returnStr += percent + "% ";
             }
             returnStr += ";";
@@ -51,42 +77,43 @@
         }
          */
         .timeline {
+            height: 50vh;
             display: grid;
             grid-template-columns: 30% 1% 30%;
-            grid-template-rows: 25% 25% 25% 25%;
+            grid-template-rows: 8.333333333333334% 8.333333333333334% 8.333333333333334% 8.333333333333334% 8.333333333333334% 8.333333333333334% 8.333333333333334% 8.333333333333334% 8.333333333333334% 8.333333333333334% 8.333333333333334% 8.333333333333334%;
         }
 
         .t1 {
             text-align: right;
             padding: 10;
             grid-column: 1/2;
-            grid-row: 1/2;
+            grid-row: 13/14;
         }
 
         .t2 {
             text-align: left;
             padding: 10;
             grid-column: 3/4;
-            grid-row: 2/3;
+            grid-row: 12/13;
         }
 
         .t3 {
             text-align: right;
             padding: 10;
             grid-column: 1/2;
-            grid-row: 3/4;
+            grid-row: 11/12;
         }
 
         .t4 {
             text-align: left;
             padding: 10;
             grid-column: 3/4;
-            grid-row: 4/5;
+            grid-row: 10/11;
         }
 
         .bar {
             grid-column: 2/3;
-            grid-row: 1/5;
+            grid-row: 1/all;
             border-radius: 10px;
             background-color: red;
         }
@@ -94,21 +121,8 @@
 </head>
 
 <body onload="loaded()">
-    <div class="timeline">
+    <div class="timeline" id="timeline">
         <div class="bar"></div>
-        <div class="t1">
-            January 1st
-        </div>
-        <div class="t2">
-            January 2st
-        </div>
-        <div class="t3">
-            January 3st
-        </div>
-        <div class="t4">
-            January 4st
-        </div>
-
     </div>
 
 </body>
