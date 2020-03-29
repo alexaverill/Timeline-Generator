@@ -2,13 +2,42 @@
 
 <head>
     <script type="text/javascript">
-        let timelineEntries = [];
+
+        class Timeline {
+            entries = [];
+            constructor() {
+                this.entries = [];
+            }
+            // addEntry(date,content){
+
+            // }
+            addEntry(entry) {
+                this.entries.push(entry);
+                this.sort();
+            }
+            sort() {
+                this.entries = this.entries.sort(this.compare);
+            }
+            compare(d1, d2) {
+                if (d1.date < d2.date) {
+                    return -1;
+                }
+                if (d1.date > d2.date) {
+                    return 1;
+                }
+                return 0;
+            }
+            getEntries() {
+                return this.entries;
+            }
+        }
         class TimeElement {
             constructor(dateTime, content) {
                 this.date = dateTime;
                 this.content = content;
             }
         }
+        var timeline = new Timeline();
         function loaded() {
             console.log("Loaded");
             //generateTimeline();
@@ -68,51 +97,52 @@
             returnStr += ";";
             return returnStr;
         }
-        function createDate(){
+        function createDate() {
             let cont = document.createElement('div');
             cont.className = 'formElement';
             let label = document.createElement('label');
-            label.setAttribute('for','date');
-            label.innerText="Date:";
+            label.setAttribute('for', 'date');
+            label.innerText = "Date:";
             let date = document.createElement('input');
-            date.type='date';
-            date.name='date';
-            
+            date.type = 'date';
+            date.name = 'date';
+
             cont.appendChild(label);
             cont.appendChild(date);
             return cont;
         }
-        function createText(){
+        function createText() {
             let cont = document.createElement('div');
             cont.className = 'formElement';
             let tLabel = document.createElement('label');
-            tLabel.setAttribute('for','desc');
-            tLabel.innerText="Content:";
+            tLabel.setAttribute('for', 'desc');
+            tLabel.innerText = "Content:";
             let text = document.createElement('textarea');
-            text.name='desc';
+            text.name = 'desc';
             cont.appendChild(tLabel);
             cont.appendChild(text);
             return cont;
         }
-        function addEntry(){
+        function addEntry() {
             let element = document.getElementById("entries");
             let container = document.createElement('div');
             container.className = "entry";
             container.appendChild(createDate());
             container.appendChild(createText());
-        element.appendChild(container);
+            element.appendChild(container);
         }
-        function processEntries(){
+        function processEntries() {
             let entries = document.getElementsByClassName("entry");
             //console.log(entries);
-            timelineEntries = [];
-            for(let x =0; x<entries.length; x++){
+            //timelineEntries = [];
+            for (let x = 0; x < entries.length; x++) {
                 let time = entries[x].getElementsByTagName('input')[0].value;
                 let content = entries[x].getElementsByTagName('textarea')[0].value;
-                timelineEntries.push(new TimeElement(new Date(time),content));
+                timeline.addEntry(new TimeElement(new Date(time), content));
             }
-            console.log(timelineEntries);
-            generateTimeline(timelineEntries);
+
+
+            generateTimeline(timeline.getEntries());
         }
     </script>
     <style>
@@ -125,7 +155,27 @@
             grid-column: 1/2;
         }
          */
-         .timeline{height:50vh;display: grid; grid-template-columns:30% 1% 30%;grid-template-rows:2.7777777777777777% 2.7777777777777777% 2.7777777777777777% 2.7777777777777777% 2.7777777777777777% 2.7777777777777777% 2.7777777777777777% 2.7777777777777777% 2.7777777777777777% 2.7777777777777777% 2.7777777777777777% 2.7777777777777777% 2.7777777777777777% 2.7777777777777777% 2.7777777777777777% 2.7777777777777777% 2.7777777777777777% 2.7777777777777777% 2.7777777777777777% 2.7777777777777777% 2.7777777777777777% 2.7777777777777777% 2.7777777777777777% 2.7777777777777777% 2.7777777777777777% 2.7777777777777777% 2.7777777777777777% 2.7777777777777777% 2.7777777777777777% 2.7777777777777777% 2.7777777777777777% 2.7777777777777777% 2.7777777777777777% 2.7777777777777777% 2.7777777777777777% 2.7777777777777777% ;}.t1{ text-align:right;padding:10;grid-column:1/2;grid-row:37/38;}.t2{ text-align:left;padding:10;grid-column:3/4;grid-row:36/37;}.t3{ text-align:right;padding:10;grid-column:1/2;grid-row:35/36;}.t4{ text-align:left;padding:10;grid-column:3/4;grid-row:34/35;}.t5{ text-align:right;padding:10;grid-column:1/2;grid-row:11/12;}.t6{ text-align:left;padding:10;grid-column:3/4;grid-row:3/4;}
+        .timeline {
+            height: 50vh;
+            display: grid;
+            grid-template-columns: 30% 1% 30%;
+            grid-template-rows: 4.166666666666667% 4.166666666666667% 4.166666666666667% 4.166666666666667% 4.166666666666667% 4.166666666666667% 4.166666666666667% 4.166666666666667% 4.166666666666667% 4.166666666666667% 4.166666666666667% 4.166666666666667% 4.166666666666667% 4.166666666666667% 4.166666666666667% 4.166666666666667% 4.166666666666667% 4.166666666666667% 4.166666666666667% 4.166666666666667% 4.166666666666667% 4.166666666666667% 4.166666666666667% 4.166666666666667%;
+        }
+
+        .t1 {
+            text-align: right;
+            padding: 10;
+            grid-column: 1/2;
+            grid-row: 18/19;
+        }
+
+        .t2 {
+            text-align: left;
+            padding: 10;
+            grid-column: 3/4;
+            grid-row: 12/13;
+        }
+
         .bar {
             grid-column: 2/3;
             grid-row: 1/all;
@@ -138,11 +188,11 @@
 <body onload="loaded()">
     <div class="ui">
         <button type="button" onclick="addEntry()">Add Entry</button>
-         <div id="entries" class="entries">
-           <!-- <div class="formElement"><label for="date">Date:</label><input type="date" name="date"></div>
+        <div id="entries" class="entries">
+            <!-- <div class="formElement"><label for="date">Date:</label><input type="date" name="date"></div>
             <div class="formElement"><label for="content">Content:</label><textarea name="content"></textarea></div> -->
-    </div>
-    <button type="button" onclick="processEntries()">Generate Timeline</button>
+        </div>
+        <button type="button" onclick="processEntries()">Generate Timeline</button>
     </div>
     <div class="timeline" id="timeline">
         <div class="bar"></div>
