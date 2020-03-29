@@ -11,16 +11,11 @@
         }
         function loaded() {
             console.log("Loaded");
-            generateTimeline();
+            //generateTimeline();
         }
-        function generateTimeline() {
+        function generateTimeline(entries) {
 
-            let elements = [new TimeElement(new Date("2018-01-02"), "I went on a walk"), 
-            new TimeElement(new Date("2018-02-02"), "Ate banana again"), 
-            new TimeElement(new Date("2018-03-03"), "I fed a dog"),
-             new TimeElement(new Date("2018-04-04"), "I ate a banana"), 
-             new TimeElement(new Date("2020-03-03"), "Its now"),
-             new TimeElement(new Date("2020-11-11"),"November")];
+            let elements = entries;
             //get range of years
             //TODO sort elements array. 
             let latest = elements[elements.length - 1].date.getFullYear();
@@ -54,7 +49,8 @@
 
             for (let x = 0; x < elements.length; x++) {
                 let templatedString = `<div class="t${x + 1}">
-                                        ${elements[x].date.toLocaleDateString("en-US")}
+                                        <div class="timelineDate">${elements[x].date.toLocaleDateString("en-US")}</div>
+                                        <div class="timelineContent">${elements[x].content}</div>
                                       </div>`;
                 htmlString += templatedString;
             }
@@ -113,9 +109,10 @@
             for(let x =0; x<entries.length; x++){
                 let time = entries[x].getElementsByTagName('input')[0].value;
                 let content = entries[x].getElementsByTagName('textarea')[0].value;
-                timelineEntries.push(new TimeElement(time,content));
+                timelineEntries.push(new TimeElement(new Date(time),content));
             }
             console.log(timelineEntries);
+            generateTimeline(timelineEntries);
         }
     </script>
     <style>
