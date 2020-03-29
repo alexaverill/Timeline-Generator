@@ -2,6 +2,7 @@
 
 <head>
     <script type="text/javascript">
+        let timelineEntries = [];
         class TimeElement {
             constructor(dateTime, content) {
                 this.date = dateTime;
@@ -105,6 +106,17 @@
             container.appendChild(createText());
         element.appendChild(container);
         }
+        function processEntries(){
+            let entries = document.getElementsByClassName("entry");
+            //console.log(entries);
+            timelineEntries = [];
+            for(let x =0; x<entries.length; x++){
+                let time = entries[x].getElementsByTagName('input')[0].value;
+                let content = entries[x].getElementsByTagName('textarea')[0].value;
+                timelineEntries.push(new TimeElement(time,content));
+            }
+            console.log(timelineEntries);
+        }
     </script>
     <style>
         /* .timeline{
@@ -133,6 +145,7 @@
            <!-- <div class="formElement"><label for="date">Date:</label><input type="date" name="date"></div>
             <div class="formElement"><label for="content">Content:</label><textarea name="content"></textarea></div> -->
     </div>
+    <button type="button" onclick="processEntries()">Generate Timeline</button>
     </div>
     <div class="timeline" id="timeline">
         <div class="bar"></div>
