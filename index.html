@@ -42,7 +42,9 @@
             console.log("Loaded");
             //generateTimeline();
         }
+        //TODO maybe refactor.
         function generateTimeline(entries) {
+
             let cssCode = document.getElementById('cssCode');
             let htmlCode = document.getElementById('htmlCode');
             let elements = entries;
@@ -76,14 +78,21 @@
             cssCode.innerText = cssString;
             //generate HTML for elements
             let htmlString = '';
+            let outputHTML = '';
 
             for (let x = 0; x < elements.length; x++) {
                 let templatedString = `<div class="t${x + 1}" style="${cssEntries[x]}">
                                         <div class="timelineDate">${elements[x].date.toLocaleDateString("en-US")}</div>
                                         <div class="timelineContent">${elements[x].content}</div>
                                       </div>`;
+                let outputString = `<div class="t${x + 1}>
+                                        <div class="timelineDate">${elements[x].date.toLocaleDateString("en-US")}</div>
+                                        <div class="timelineContent">${elements[x].content}</div>
+                                      </div>`;
+                outputHTML += outputString;
                 htmlString += templatedString;
             }
+            htmlCode.innerText = outputHTML;
             document.getElementById("timeline").innerHTML += htmlString;
         }
         /// 
