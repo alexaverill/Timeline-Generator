@@ -2,7 +2,26 @@
 
 <head>
     <script type="text/javascript">
-        let timelineEntries = [];
+        let timeline = new Timeline;
+        class Timeline{
+            entries=[];
+            constructor(){
+
+            }
+            addEntry(date,content){
+
+            }
+            addEntry(entry){
+                entries.push(entry);
+                sort();
+            }
+            sort(){
+                //sort entries by date;
+            }
+            getEntries(){
+                return entries;
+            }
+        }
         class TimeElement {
             constructor(dateTime, content) {
                 this.date = dateTime;
@@ -109,9 +128,10 @@
             for(let x =0; x<entries.length; x++){
                 let time = entries[x].getElementsByTagName('input')[0].value;
                 let content = entries[x].getElementsByTagName('textarea')[0].value;
-                timelineEntries.push(new TimeElement(new Date(time),content));
+                timline.addEntry(new TimeElement(new Date(time),content));
             }
-            console.log(timelineEntries);
+            console.log(timeline.getEntries);
+            
             generateTimeline(timelineEntries);
         }
     </script>
