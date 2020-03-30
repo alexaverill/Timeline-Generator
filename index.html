@@ -52,8 +52,9 @@
             let earliest = elements[0].date.getFullYear();
             let range = latest - earliest + 1;
             //generate CSS for elements.
-            
+            console.log(range);
             let tempRows = calculateTemplateRows(range);
+            console.log(tempRows);
             let timelineCSS = `height:50vh;\n
                                display: grid;\n 
                                grid-template-columns:30% 1% 30%;\n
@@ -85,7 +86,7 @@
             }
             cssCode.innerText = cssString;
             //generate HTML for elements
-            let htmlString = `<div class="timeline" id="timeline" style="${timelineCSS}"><div class="bar" style="${barCSS}`;
+            let htmlString = `<div class="timeline" id="timeline" style="${timelineCSS}"><div class="bar" style="${barCSS}"></div>`;
             let outputHTML = '<div class="timeline" id="timeline"><div class="bar"></div>';
 
             for (let x = 0; x < elements.length; x++) {
@@ -136,7 +137,7 @@
             let tLabel = document.createElement('label');
             tLabel.setAttribute('for', 'desc');
             tLabel.innerText = "Content:";
-            let text = document.createElement('textarea');
+            let text = document.createElement('input');
             text.name = 'desc';
             cont.appendChild(tLabel);
             cont.appendChild(text);
@@ -164,54 +165,28 @@
             generateTimeline(timeline.getEntries());
         }
     </script>
-    <style>
-        /* .timeline{
-            display: grid;
-            grid-template-columns: 30% 30% 30%;
-            grid-template-rows: auto;
-        }
-        .timelineEntry{
-            grid-column: 1/2;
-        }
-         */
-        /* .timeline {
-            height: 50vh;
-            display: grid;
-            grid-template-columns: 30% 1% 30%;
-            grid-template-rows: 4.166666666666667% 4.166666666666667% 4.166666666666667% 4.166666666666667% 4.166666666666667% 4.166666666666667% 4.166666666666667% 4.166666666666667% 4.166666666666667% 4.166666666666667% 4.166666666666667% 4.166666666666667% 4.166666666666667% 4.166666666666667% 4.166666666666667% 4.166666666666667% 4.166666666666667% 4.166666666666667% 4.166666666666667% 4.166666666666667% 4.166666666666667% 4.166666666666667% 4.166666666666667% 4.166666666666667%;
-        } */
-/* 
-        .t1 {
-            text-align: right;
-            padding: 10;
-            grid-column: 1/2;
-            grid-row: 18/19;
-        }
-
-        .t2 {
-            text-align: left;
-            padding: 10;
-            grid-column: 3/4;
-            grid-row: 12/13;
-        }
-
-        .bar {
-            grid-column: 2/3;
-            grid-row: 1/all;
-            border-radius: 10px;
-            background-color: red;
-        } */
-    </style>
+    <link rel="stylesheet" href="main.css" type="text/css">
 </head>
 
 <body onload="loaded()">
+    <div class="title">
+        <h1> Timeline Generator</h1>
+    </div>
+    <div class="content">
     <div class="ui">
-        <button type="button" onclick="addEntry()">Add Entry</button>
+        
+        <button type="button" onclick="processEntries()">Generate Timeline</button>
         <div id="entries" class="entries">
             <!-- <div class="formElement"><label for="date">Date:</label><input type="date" name="date"></div>
             <div class="formElement"><label for="content">Content:</label><textarea name="content"></textarea></div> -->
         </div>
-        <button type="button" onclick="processEntries()">Generate Timeline</button>
+        <button type="button" onclick="addEntry()">Add Entry</button>
+
+    </div>
+    <div class="timelinePreview" id="timelinePreview">
+        
+    </div>
+    <div class="ouput">
         <code id="cssCode">
 
         </code>
@@ -219,10 +194,7 @@
 
         </code>
     </div>
-    <div class="timelinePreview" id="timelinePreview">
-        
-    </div>
-
+</div>
 </body>
 
 </html>

@@ -1,0 +1,47 @@
+html body{
+    margin:0px;
+}
+code{
+    display:block;
+}
+label{
+    font-size:1.25em;
+    font-weight: bold;
+}
+input[type="date"] {
+	padding: 3%;
+	border: 1px solid black;
+	border-radius: 5px;
+	margin: 3% 0 8% 0;
+}
+input[type='text']{
+    padding: 3%;
+	border: 1px solid black;
+	border-radius: 5px;
+	margin: 3% 0 8% 0;
+}
+#cssCode,#htmlCode{
+        width: 50%;
+        background-color: lightblue;
+        padding: 5%;
+        margin: 5% 0 5% 0;
+        font: monospaced;
+        font-family: monospace;
+    
+}
+.title{
+    margin:4%;
+}
+.content{
+    
+    width:80%;
+    margin:auto;
+}
+.ui{
+    background:lightblue;
+}
+.formElement{
+    display: grid;
+width: 20%;
+margin-bottom:1%;
+}
