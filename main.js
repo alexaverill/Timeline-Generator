@@ -44,26 +44,25 @@
             if(years <1){
                 range = latest.getMonth();
             }else{
-                range =             // (12 * (years+1)) + latest.getMonth()+1;
+                range =  (12*years)+(latest.getMonth()+1);          // (12 * (years+1)) + latest.getMonth()+1;
             }
-            return range;
+            return range+1;
         }
         function loaded(){
-            let a = new Date('1/22/2020');
-            let b = new Date('2/21/2019');
-            let c = new Date('07/08/2018');
-            console.log(getRange(c,a));
-            console.log(b+" "+calculatePosition(c,a,b))
+            // let a = new Date('1/22/2020');
+            // let b = new Date('2/21/2019');
+            // let c = new Date('07/08/2018');
+            // console.log(getRange(c,a));
+            // console.log(b+" "+calculatePosition(c,a,b))
         }
         function calculatePosition(earliest,latest, date){
             let range = getRange(earliest,latest);
-            let distanceFromLatest = latest.getFullYear()-date.getFullYear();
-            if(distanceFromLatest <1){
-                return 12 - (date.getMonth()+1);
-            }else{
-                return (12-(date.getMonth()+1))+distanceFromLatest*12;
+            let years = latest.getFullYear()-date.getFullYear();
+            let r = (12*years);
+            if(years <1){
+                return date.getMonth();
             }
-            return range;
+            return r;
         }
         //TODO maybe refactor.
         function generateTimeline(entries) {
@@ -75,7 +74,7 @@
             let earliestDate = elements[0].date;
             let range = getRange(earliestDate,latestDate);
             let tempRows = calculateTemplateRows(range);
-            console.log(range);
+            console.log("Range: "+range);
             let timelineCSS = `height:50vh;\n
                                display: grid;\n 
                                grid-template-columns:48% 1% auto;\n
@@ -92,8 +91,8 @@
                 //calculate row pos;
                 let pos = x + 1;
 
-                let calculatedRow = calculatePosition(earliestDate,latestDate,elements[x].date);
-                let rowPos = (calculatedRow + 1) + "/" + (calculatedRow + 2);
+                let calculatedRow  = calculatePosition(earliestDate,latestDate,elements[x].date);
+                let rowPos = (calculatedRow ) + "/" + (calculatedRow+1 );
                 console.log(elements[x].date + " " + rowPos);
                 let colPos = "1/2";
                 let alignment = "right";
