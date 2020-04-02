@@ -100,7 +100,7 @@
                 let inverseMonths = 12 * diff;
                 let startCol = timeline.numMonths-(m+inverseMonths);
                 //console.log(m+" "+inverseMonths +" "+(timeline.numMonths-(m+inverseMonths)));
-                let rowPos = (startCol ) + "/" + (startCol+1 );
+                let rowPos = (startCol-1 ) + "/" + (startCol );
                 let colPos = "1/2";
                 let alignment = "right";
                 if (x % 2 == 0) {
@@ -195,7 +195,7 @@
         }
         function loaded(){
             timeline.addEntry(new TimeElement(new Date('1/22/2018'),'a'));
-            timeline.addEntry(new TimeElement(new Date('2/22/2018'),'a'));
+            //timeline.addEntry(new TimeElement(new Date('2/22/2018'),'a'));
             timeline.addEntry(new TimeElement(new Date('3/12/2018'),'a'));
             timeline.addEntry(new TimeElement(new Date('1/12/2019'),'a'));
             timeline.addEntry(new TimeElement(new Date('11/02/2019'),'a'));
