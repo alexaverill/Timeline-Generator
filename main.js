@@ -3,6 +3,8 @@
             entries = [];
             constructor() {
                 this.entries = [];
+                this.numYears=0;
+                this.numMonths = 0;
             }
             // addEntry(date,content){
 
@@ -10,6 +12,19 @@
             addEntry(entry) {
                 this.entries.push(entry);
                 this.sort();
+                this.calculateRange();
+            }
+            calculateRange(){
+                if(this.entries.length<=1){
+                    this.numYears=0;
+                    return;
+                }
+                let test = this.entries[this.entries.length-1].date - this.entries[0].date;
+                this.numYears = (this.entries[this.entries.length-1].date.getFullYear()-this.entries[0].date.getFullYear());
+                this.numMonths = (12 * this.numYears);
+                this.numMonths += this.entries[this.entries.length-1].date.getMonth();
+                this.numMonths -= this.entries[0].date.getMonth()+1;
+                this.numMonths+=1;
             }
             sort() {
                 this.entries = this.entries.sort(this.compare);
@@ -48,15 +63,8 @@
             }
             return range+1;
         }
-        function loaded(){
-            // let a = new Date('1/22/2020');
-            // let b = new Date('2/21/2019');
-            // let c = new Date('07/08/2018');
-            // console.log(getRange(c,a));
-            // console.log(b+" "+calculatePosition(c,a,b))
-        }
-        function calculatePosition(earliest,latest, date){
-            let range = getRange(earliest,latest);
+
+        function calculatePosition(latest, date){
             let years = latest.getFullYear()-date.getFullYear();
             let r = (12*years);
             if(years <1){
@@ -65,38 +73,37 @@
             return r;
         }
         //TODO maybe refactor.
-        function generateTimeline(entries) {
-
+        function generateTimeline(timeline) {
+            console.log(timeline.numMonths);
             let cssCode = document.getElementById('cssCode');
             let htmlCode = document.getElementById('htmlCode');
-            let elements = entries;
-            let latestDate = elements[elements.length - 1].date;
-            let earliestDate = elements[0].date;
-            let range = getRange(earliestDate,latestDate);
-            let tempRows = calculateTemplateRows(range);
-            console.log("Range: "+range);
+
+            let months = timeline.numMonths;
+             let tempRows = calculateTemplateRows(months);
+            console.log(months);
             let timelineCSS = `height:50vh;\n
                                display: grid;\n 
                                grid-template-columns:48% 1% auto;\n
                                grid-template-rows:${tempRows};\n`;
             let barCSS = `grid-column: 2/3;
-                          grid-row: 1/${range};
+                          grid-row: 1/${months};
                           border-radius: 10px;
                           background-color: #49a078;`;
             let cssString = `.timeline{${timelineCSS}}\n;
                              .bar{${barCSS}} `;
             let cssEntries = [];
-            
-            for (let x = 0; x < elements.length; x++) {
-                //calculate row pos;
-                let pos = x + 1;
-
-                let calculatedRow  = calculatePosition(earliestDate,latestDate,elements[x].date);
-                let rowPos = (calculatedRow ) + "/" + (calculatedRow+1 );
-                console.log(elements[x].date + " " + rowPos);
+            let newestYear = timeline.entries[timeline.entries.length-1].date.getFullYear();
+            for(let x = 0 ; x< timeline.entries.length; x++){
+                let m = timeline.entries[x].date.getMonth();
+                let y = timeline.entries[x].date.getFullYear();
+                let diff = timeline.numYears - (newestYear-y);
+                let inverseMonths = 12 * diff;
+                let startCol = timeline.numMonths-(m+inverseMonths);
+                //console.log(m+" "+inverseMonths +" "+(timeline.numMonths-(m+inverseMonths)));
+                let rowPos = (startCol ) + "/" + (startCol+1 );
                 let colPos = "1/2";
                 let alignment = "right";
-                if (pos % 2 == 0) {
+                if (x % 2 == 0) {
                     colPos = "3/4";
                     alignment = "left";
                 }
@@ -109,14 +116,14 @@
             let htmlString = `<div class="timeline" id="timeline" style="${timelineCSS}"><div class="bar" style="${barCSS}"></div>`;
             let outputHTML = '<div class="timeline" id="timeline"><div class="bar"></div>';
 
-            for (let x = 0; x < elements.length; x++) {
+            for (let x = 0; x < timeline.entries.length; x++) {
                 let templatedString = `<div class="t${x + 1}" style="${cssEntries[x]}">
-                                        <div class="timelineDate">${elements[x].date.toLocaleDateString("en-US")}</div>
-                                        <div class="timelineContent">${elements[x].content}</div>
+                                        <div class="timelineDate">${timeline.entries[x].date.toLocaleDateString("en-US")}</div>
+                                        <div class="timelineContent">${timeline.entries[x].content}</div>
                                       </div>`;
                 let outputString = `<div class="t${x + 1}>
-                                        <div class="timelineDate">${elements[x].date.toLocaleDateString("en-US")}</div>
-                                        <div class="timelineContent">${elements[x].content}</div>
+                                        <div class="timelineDate">${timeline.entries[x].date.toLocaleDateString("en-US")}</div>
+                                        <div class="timelineContent">${timeline.entries[x].content}</div>
                                       </div>`;
                 outputHTML += outputString;
                 htmlString += templatedString;
@@ -185,4 +192,17 @@
 
 
             generateTimeline(timeline.getEntries());
+        }
+        function loaded(){
+            timeline.addEntry(new TimeElement(new Date('1/22/2018'),'a'));
+            timeline.addEntry(new TimeElement(new Date('2/22/2018'),'a'));
+            timeline.addEntry(new TimeElement(new Date('3/12/2018'),'a'));
+            timeline.addEntry(new TimeElement(new Date('1/12/2019'),'a'));
+            timeline.addEntry(new TimeElement(new Date('11/02/2019'),'a'));
+            generateTimeline(timeline);
+            // let a = new Date('1/22/2020');
+            // let b = new Date('2/21/2019');
+            // let c = new Date('07/08/2018');
+            // console.log(getRange(c,a));
+            // console.log(b+" "+calculatePosition(c,a,b))
         }
