@@ -38,25 +38,50 @@
             console.log("Loaded");
             //generateTimeline();
         }
+        function getRange(earliest,latest){
+            let years = latest.getFullYear()-earliest.getFullYear();
+            let range  = 0;
+            if(years <1){
+                range = latest.getMonth();
+            }else{
+                range =             // (12 * (years+1)) + latest.getMonth()+1;
+            }
+            return range;
+        }
+        function loaded(){
+            let a = new Date('1/22/2020');
+            let b = new Date('2/21/2019');
+            let c = new Date('07/08/2018');
+            console.log(getRange(c,a));
+            console.log(b+" "+calculatePosition(c,a,b))
+        }
+        function calculatePosition(earliest,latest, date){
+            let range = getRange(earliest,latest);
+            let distanceFromLatest = latest.getFullYear()-date.getFullYear();
+            if(distanceFromLatest <1){
+                return 12 - (date.getMonth()+1);
+            }else{
+                return (12-(date.getMonth()+1))+distanceFromLatest*12;
+            }
+            return range;
+        }
         //TODO maybe refactor.
         function generateTimeline(entries) {
 
             let cssCode = document.getElementById('cssCode');
             let htmlCode = document.getElementById('htmlCode');
             let elements = entries;
-            let latest = elements[elements.length - 1].date.getFullYear();
-            let earliest = elements[0].date.getFullYear();
-            let range = latest - earliest + 1;
-            //generate CSS for elements.
-            console.log(range);
+            let latestDate = elements[elements.length - 1].date;
+            let earliestDate = elements[0].date;
+            let range = getRange(earliestDate,latestDate);
             let tempRows = calculateTemplateRows(range);
-            console.log(tempRows);
+            console.log(range);
             let timelineCSS = `height:50vh;\n
                                display: grid;\n 
                                grid-template-columns:48% 1% auto;\n
                                grid-template-rows:${tempRows};\n`;
             let barCSS = `grid-column: 2/3;
-                          grid-row: 1/${range*12};
+                          grid-row: 1/${range};
                           border-radius: 10px;
                           background-color: #49a078;`;
             let cssString = `.timeline{${timelineCSS}}\n;
@@ -66,8 +91,8 @@
             for (let x = 0; x < elements.length; x++) {
                 //calculate row pos;
                 let pos = x + 1;
-                let calculatedRow = (latest - elements[x].date.getFullYear()) * 12 + (12 - elements[x].date.getMonth());
 
+                let calculatedRow = calculatePosition(earliestDate,latestDate,elements[x].date);
                 let rowPos = (calculatedRow + 1) + "/" + (calculatedRow + 2);
                 console.log(elements[x].date + " " + rowPos);
                 let colPos = "1/2";
@@ -103,11 +128,12 @@
         }
         /// 
         /// Calculate number of rows needed by total number of years displayed.
-        function calculateTemplateRows(years) {
+        function calculateTemplateRows(range) {
+
             returnStr = ''; //need to double check on string immutibility in js.
-            let percent = 100 / (years * 12);
+            let percent = 100 / range;
             console.log(percent);
-            for (let x = 0; x < (years * 12); x++) {
+            for (let x = 0; x <range; x++) {
                 returnStr += percent + "% ";
             }
             returnStr += ";";
