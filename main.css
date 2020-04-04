@@ -85,7 +85,6 @@ input[type='text']{
 }
 .formElement{
     display: grid;
-width: 20%;
 margin-bottom:1%;
 }
 .generate{
