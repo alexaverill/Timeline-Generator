@@ -7,23 +7,28 @@
 
 <body onload="loaded()">
     <div class="title">
-        <h1> Timeline Generator</h1>
+        <h1 class="titletext"> Timeline Generator</h1>
     </div>
     <div class="content">
         <div class="instructions"></div>
-        <div class="generate">
-            <button type="button"  class="generateBtn" onclick="processEntries()">Generate Timeline</button>
-        </div>
+
         <div class="ui">
-            <div>
-                <div id="entries" class="entries">
-                    <!-- <div class="formElement"><label for="date">Date:</label><input type="date" name="date"></div>
+
+            <div id="entries" class="entries">
+                <!-- <div class="formElement"><label for="date">Date:</label><input type="date" name="date"></div>
             <div class="formElement"><label for="content">Content:</label><textarea name="content"></textarea></div> -->
+            </div>
+            <div class="buttons">
+                <div class="addBtn">
+                    <button type="button" onclick="addEntry()" name="addEntry">Add Entry</button>
+                </div>
+                <div class="generate">
+                    <button type="button" class="generateBtn" name="generate" onclick="processEntries()">Generate
+                        Timeline</button>
                 </div>
 
-                <button type="button" onclick="addEntry()">Add Entry</button>
             </div>
-            
+
         </div>
         <div class="timelinePreview" id="timelinePreview">
 

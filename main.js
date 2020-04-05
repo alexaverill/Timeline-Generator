@@ -246,18 +246,5 @@
             generateTimeline(timeline,false);
         }
         function loaded(){
-            // let timeline = new Timeline();
-            //  timeline.addEntry(new TimeElement(new Date('04/01/2020'),'a'));
-            //  timeline.addEntry(new TimeElement(new Date('3/12/2018'),'a'));
-            //  timeline.addEntry(new TimeElement(new Date('01/12/2020'),'a'));
-            //  timeline.addEntry(new TimeElement(new Date('1/22/2018'),'a'));
-            // timeline.addEntry(new TimeElement(new Date('2/22/2019'),'a'));
-            // timeline.calculatePositions();
-
-            //   generateTimeline(timeline);
-            // let a = new Date('1/22/2020');
-            // let b = new Date('2/21/2019');
-            // let c = new Date('07/08/2018');
-            // console.log(getRange(c,a));
-            // console.log(b+" "+calculatePosition(c,a,b))
+            addEntry();
         }
