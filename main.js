@@ -14,6 +14,7 @@
                 this.entries.push(entry);
                 this.sort();
                 this.calculateRange();
+                this.calculatePositions();
             }
             calculateRange(){
                 if(this.entries.length<=1){
@@ -74,17 +75,6 @@
             }
         }
         
-        function getRange(earliest,latest){
-            let years = latest.getFullYear()-earliest.getFullYear();
-            let range  = 0;
-            if(years <1){
-                range = latest.getMonth();
-            }else{
-                range =  (12*years)+(latest.getMonth()+1);          // (12 * (years+1)) + latest.getMonth()+1;
-            }
-            return range+1;
-        }
-
         function calculatePosition(latest, date){
             let years = latest.getFullYear()-date.getFullYear();
             let r = (12*years);
@@ -174,8 +164,9 @@
                 htmlString += templatedString;
             }
             htmlString += '</div>';
+            htmlCode.innerText = "";
             htmlCode.innerText = outputHTML;
-            document.getElementById("timelinePreview").innerHTML += htmlString;
+            document.getElementById("timelinePreview").innerHTML = htmlString;
         }
         /// 
         /// Calculate number of rows needed by total number of years displayed.
@@ -238,15 +229,15 @@
             generateTimeline(timeline,false);
         }
         function loaded(){
-            let timeline = new Timeline();
-             timeline.addEntry(new TimeElement(new Date('04/01/2020'),'a'));
-             timeline.addEntry(new TimeElement(new Date('3/12/2018'),'a'));
-             timeline.addEntry(new TimeElement(new Date('01/12/2020'),'a'));
-             timeline.addEntry(new TimeElement(new Date('1/22/2018'),'a'));
-            timeline.addEntry(new TimeElement(new Date('2/22/2019'),'a'));
-            timeline.calculatePositions();
+            // let timeline = new Timeline();
+            //  timeline.addEntry(new TimeElement(new Date('04/01/2020'),'a'));
+            //  timeline.addEntry(new TimeElement(new Date('3/12/2018'),'a'));
+            //  timeline.addEntry(new TimeElement(new Date('01/12/2020'),'a'));
+            //  timeline.addEntry(new TimeElement(new Date('1/22/2018'),'a'));
+            // timeline.addEntry(new TimeElement(new Date('2/22/2019'),'a'));
+            // timeline.calculatePositions();
 
-              generateTimeline(timeline);
+            //   generateTimeline(timeline);
             // let a = new Date('1/22/2020');
             // let b = new Date('2/21/2019');
             // let c = new Date('07/08/2018');
