@@ -1,0 +1,95 @@
+html body{
+    margin:0px;
+    background-color:  #ebebeb;
+    color:#0e143d;
+    font-family: 'Montserrat', sans-serif;
+
+
+}
+h1,h2,h3,h4,h5{
+    font-family: 'Roboto', sans-serif;
+}
+code{
+    display:block;
+}
+label{
+    font-size:1.25em;
+    font-weight: bold;
+    
+}
+button {
+	padding: 1%;
+	margin: .5%;
+	background: #49a078;
+	border: 1px solid #49a078;
+	border-radius: 10px;
+	font-size: 1em;
+	color: white;
+	font-weight: bold;
+}
+input[type="date"],input[type='text'] {
+	padding: 2%;
+	border: 1px solid black;
+	border-radius: 5px;
+	margin: 3% 0 3% 0;
+	width: 25%;
+}
+input[type='text']{
+    width:60%;
+}
+.output{
+    display:grid;
+    grid-template-columns: 50% 50%;
+}
+.code {
+	width: 85%;
+	background-color: #3177e0;
+	/* padding: 5%; */
+	margin: 5% 0 5% 0;
+	font: monospaced;
+	font-family: monospace;
+    border-radius: 10px;
+    color:#fff;
+}
+.code > h3{
+    text-align: center;
+    color:#fff;
+    background-color: #2559a8;
+    margin:0;
+    padding: 1%;
+    border-radius: 10px 10px 0 0;
+    
+}
+.code > code{
+    text-align: left;
+    padding:5%;
+}
+.title{
+    margin:0;
+    padding:3%;
+    background-color: #2559a8;
+    color:#fff;
+    margin-bottom:5%;
+}
+
+.content{
+    
+    width:80%;
+    margin:auto;
+}
+.ui{
+    display: grid;
+    grid-template-columns: 75% 25%;
+    margin-bottom: 5%;
+}
+
+.formElement{
+    display: grid;
+margin-bottom:1%;
+}
+.generate{
+    margin-left:80%;
+}
+.generateBtn{
+    padding:4%;
+}

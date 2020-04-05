@@ -1,143 +1,49 @@
 <html>
 
 <head>
-    <script type="text/javascript">
-        class TimeElement {
-            constructor(dateTime, content) {
-                this.date = dateTime;
-                this.content = content;
-            }
-        }
-        function loaded() {
-            console.log("Loaded");
-            generateTimeline();
-        }
-        function generateTimeline() {
-
-            let elements = [new TimeElement(new Date("2018-01-02"), "I went on a walk"), 
-            new TimeElement(new Date("2018-02-02"), "Ate banana again"), 
-            new TimeElement(new Date("2018-03-03"), "I fed a dog"),
-             new TimeElement(new Date("2018-04-04"), "I ate a banana"), 
-             new TimeElement(new Date("2020-03-03"), "Its now"),
-             new TimeElement(new Date("2020-11-11"),"November")];
-            //get range of years
-            //TODO sort elements array. 
-            let latest = elements[elements.length - 1].date.getFullYear();
-            let earliest = elements[0].date.getFullYear();
-            let range = latest - earliest + 1;
-            console.log(range);
-            //generate CSS for elements.
-            let cssString = '';
-            cssString += ".timeline{height:50vh;display: grid; grid-template-columns:30% 1% 30%;"
-            tempRows = calculateTemplateRows(range);
-            cssString += "grid-template-rows:" + tempRows;
-            cssString += "}";
-            for (let x = 0; x < elements.length; x++) {
-                //calculate row pos;
-                let pos = x + 1;
-                let calculatedRow = (latest - elements[x].date.getFullYear()) * 12 + (12 - elements[x].date.getMonth());
-
-                let rowPos = (calculatedRow + 1) + "/" + (calculatedRow + 2);
-                console.log(elements[x].date + " " + rowPos);
-                let colPos = "1/2";
-                let alignment = "right";
-                if (pos % 2 == 0) {
-                    colPos = "3/4";
-                    alignment = "left";
-                }
-                cssString += ".t" + (x + 1) + "{ text-align:" + alignment + ";padding:10;grid-column:" + colPos + ";grid-row:" + rowPos + ";}";
-            }
-            console.log(cssString);
-            //generate HTML for elements
-            let htmlString = '';
-
-            for (let x = 0; x < elements.length; x++) {
-                let templatedString = `<div class="t${x + 1}">
-                                        ${elements[x].date.toLocaleDateString("en-US")}
-                                      </div>`;
-                htmlString += templatedString;
-            }
-            document.getElementById("timeline").innerHTML += htmlString;
-        }
-        /// 
-        /// Calculate number of rows needed by total number of years displayed.
-        function calculateTemplateRows(years) {
-            returnStr = ''; //need to double check on string immutibility in js.
-            let percent = 100 / (years * 12);
-            console.log(percent);
-            for (let x = 0; x < (years * 12); x++) {
-                returnStr += percent + "% ";
-            }
-            returnStr += ";";
-            return returnStr;
-        }
-        function createDate(){
-            let cont = document.createElement('div');
-            cont.className = 'formElement';
-            let label = document.createElement('label');
-            label.setAttribute('for','date');
-            label.innerText="Date:";
-            let date = document.createElement('input');
-            date.type='date';
-            date.name='date';
-            
-            cont.appendChild(label);
-            cont.appendChild(date);
-            return cont;
-        }
-        function createText(){
-            let cont = document.createElement('div');
-            cont.className = 'formElement';
-            let tLabel = document.createElement('label');
-            tLabel.setAttribute('for','desc');
-            tLabel.innerText="Content:";
-            let text = document.createElement('textarea');
-            text.name='desc';
-            cont.appendChild(tLabel);
-            cont.appendChild(text);
-            return cont;
-        }
-        function addEntry(){
-            let element = document.getElementById("entries");
-            let container = document.createElement('div');
-            container.className = "entry";
-            container.appendChild(createDate());
-            container.appendChild(createText());
-        element.appendChild(container);
-        }
-    </script>
-    <style>
-        /* .timeline{
-            display: grid;
-            grid-template-columns: 30% 30% 30%;
-            grid-template-rows: auto;
-        }
-        .timelineEntry{
-            grid-column: 1/2;
-        }
-         */
-         .timeline{height:50vh;display: grid; grid-template-columns:30% 1% 30%;grid-template-rows:2.7777777777777777% 2.7777777777777777% 2.7777777777777777% 2.7777777777777777% 2.7777777777777777% 2.7777777777777777% 2.7777777777777777% 2.7777777777777777% 2.7777777777777777% 2.7777777777777777% 2.7777777777777777% 2.7777777777777777% 2.7777777777777777% 2.7777777777777777% 2.7777777777777777% 2.7777777777777777% 2.7777777777777777% 2.7777777777777777% 2.7777777777777777% 2.7777777777777777% 2.7777777777777777% 2.7777777777777777% 2.7777777777777777% 2.7777777777777777% 2.7777777777777777% 2.7777777777777777% 2.7777777777777777% 2.7777777777777777% 2.7777777777777777% 2.7777777777777777% 2.7777777777777777% 2.7777777777777777% 2.7777777777777777% 2.7777777777777777% 2.7777777777777777% 2.7777777777777777% ;}.t1{ text-align:right;padding:10;grid-column:1/2;grid-row:37/38;}.t2{ text-align:left;padding:10;grid-column:3/4;grid-row:36/37;}.t3{ text-align:right;padding:10;grid-column:1/2;grid-row:35/36;}.t4{ text-align:left;padding:10;grid-column:3/4;grid-row:34/35;}.t5{ text-align:right;padding:10;grid-column:1/2;grid-row:11/12;}.t6{ text-align:left;padding:10;grid-column:3/4;grid-row:3/4;}
-        .bar {
-            grid-column: 2/3;
-            grid-row: 1/all;
-            border-radius: 10px;
-            background-color: red;
-        }
-    </style>
+    <script type="text/javascript" src="main.js"></script>
+    <link rel="stylesheet" href="main.css" type="text/css">
 </head>
 
 <body onload="loaded()">
-    <div class="ui">
-        <button type="button" onclick="addEntry()">Add Entry</button>
-         <div id="entries" class="entries">
-           <!-- <div class="formElement"><label for="date">Date:</label><input type="date" name="date"></div>
+    <div class="title">
+        <h1> Timeline Generator</h1>
+    </div>
+    <div class="content">
+        <div class="instructions"></div>
+        <div class="generate">
+            <button type="button"  class="generateBtn" onclick="processEntries()">Generate Timeline</button>
+        </div>
+        <div class="ui">
+            <div>
+                <div id="entries" class="entries">
+                    <!-- <div class="formElement"><label for="date">Date:</label><input type="date" name="date"></div>
             <div class="formElement"><label for="content">Content:</label><textarea name="content"></textarea></div> -->
-    </div>
-    </div>
-    <div class="timeline" id="timeline">
-        <div class="bar"></div>
-    </div>
+                </div>
 
+                <button type="button" onclick="addEntry()">Add Entry</button>
+            </div>
+            
+        </div>
+        <div class="timelinePreview" id="timelinePreview">
+
+        </div>
+        <div class="output">
+            <div class="code">
+                <h3>CSS</h3>
+                <code id="cssCode">
+
+        </code>
+            </div>
+            <div class="code">
+                <h3>HTML</h3>
+                <code id="htmlCode">
+
+        </code>
+            </div>
+
+        </div>
+    </div>
 </body>
 
 </html>
