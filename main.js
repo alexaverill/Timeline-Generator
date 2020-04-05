@@ -206,7 +206,7 @@
             let date = document.createElement('input');
             date.type = 'date';
             date.name = 'date';
-
+            date.classList.add('dateInput');
             cont.appendChild(label);
             cont.appendChild(date);
             return cont;
@@ -219,6 +219,7 @@
             tLabel.innerText = "Content:";
             let text = document.createElement('input');
             text.name = 'desc';
+            text.type='text';
             cont.appendChild(tLabel);
             cont.appendChild(text);
             return cont;
