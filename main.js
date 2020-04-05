@@ -5,6 +5,7 @@
                 this.entries = [];
                 this.numYears=0;
                 this.numMonths = 0;
+                this.maxRow = -1;
             }
             // addEntry(date,content){
 
@@ -19,7 +20,7 @@
                     this.numYears=0;
                     return;
                 }
-                let test = this.entries[this.entries.length-1].date - this.entries[0].date;
+                this.newestYear = this.entries[this.entries.length-1].date.getFullYear();
                 this.numYears = (this.entries[this.entries.length-1].date.getFullYear()-this.entries[0].date.getFullYear());
                 this.numMonths = (12 * this.numYears);
                 this.numMonths += this.entries[this.entries.length-1].date.getMonth();
@@ -41,11 +42,35 @@
             getEntries() {
                 return this.entries;
             }
+            calculatePositions(){
+                //calculate each entries position. 
+                this.calculateRange();
+                //get the last month (most recent) and invert it so that we can scale the timeline to start on that month.
+                let lastMonth = (12 - this.entries[this.entries.length -1].date.getMonth());
+                for(let x =0; x<this.entries.length; x++){
+                    let month = this.entries[x].date.getMonth();
+                    let year = this.entries[x].date.getFullYear();
+                    let yearDifference = this.newestYear - year;
+                    //invert the current month number
+                    let monthNumber = (12 - month);
+                    //scale by the position based on its year
+                    monthNumber+=(yearDifference*12);
+                    //remove the extra space that is added so that the last month is the first entry on the timeline.
+                    monthNumber-=lastMonth;
+                    //adding one so that the timeline doesn't end at the same point as the last item.
+                    this.maxRow = monthNumber>this.maxRow ? monthNumber+1: this.maxRow;
+                    this.entries[x].position = monthNumber;
+                    //console.log(month +" "+year+" : "+monthNumber+" "+lastMonth);
+                    
+                }
+                console.log(this.entries);
+            }
         }
         class TimeElement {
             constructor(dateTime, content) {
                 this.date = dateTime;
                 this.content = content;
+                this.position ='';
             }
         }
         
@@ -68,18 +93,18 @@
             }
             return r;
         }
-        function makeBarCSS(numberMonths,mobile=false){
+        function makeBarCSS(numberMonths,mobile){
             let gridCol = "2/3";
             if(mobile){
-                gridCole = "1/2"
+                gridCol = "1/2"
             }
             let barCSS = `grid-column: ${gridCol};
-                          grid-row: 1/${numberMonths};
+                          grid-row: 1/${numberMonths+1};
                           border-radius: 10px;
                           background-color: #49a078;`;
             return barCSS;
         }
-        function makeTimelineCSS(rows,mobile=false){
+        function makeTimelineCSS(rows,mobile){
             let cols = "48% 1% auto";
             if(mobile){
                 cols = "1% 48% auto"
@@ -90,25 +115,18 @@
             grid-template-rows:${rows};\n`;
             return timeline;
         }
-        function generateCSS(timeline,mobile=false){
-            let months = timeline.numMonths;
+        function generateCSS(timeline,mobile){
+            let months = timeline.maxRow;
             let tempRows = calculateTemplateRows(months);
-            let timelineCSS = makeTimelineCSS(tempRows);
-            let barCSS = makeBarCSS();
+            let timelineCSS = makeTimelineCSS(tempRows,mobile);
+            let barCSS = makeBarCSS(months,mobile);
             let cssString = `.timeline{\n${timelineCSS}}\n;
                              .bar{${barCSS}\n} \n`;
             let cssEntries = [];
             let newestYear = timeline.entries[timeline.entries.length-1].date.getFullYear();
             for(let x = 0 ; x< timeline.entries.length; x++){
-                let currentMonth = timeline.entries[x].date.getMonth();
-                let currentYear = timeline.entries[x].date.getFullYear();
-                let diff = timeline.numYears - (newestYear-currentYear);
-                let monthNumber = 12 * diff;
-                let startCol = currentMonth+monthNumber;
-                startCol = timeline.numMonths-startCol+1;
-                console.log(timeline.numMonths);
-                console.log(timeline.entries[x].date + " " +currentMonth+" "+monthNumber +" "+startCol);
-                let rowPos = (startCol ) + "/" + (startCol+1);
+
+                let rowPos = (timeline.entries[x].position ) + "/" + (timeline.entries[x].position +1);
                 let colPos = "1/2";
                 let alignment = "right";
                 if (x % 2 == 0) {
@@ -130,16 +148,16 @@
         }
         //TODO maybe refactor.
         function generateTimeline(timeline,mobile=false) {
-            console.log(timeline.numMonths);
+            console.log(timeline.maxRow);
             let cssCode = document.getElementById('cssCode');
             let htmlCode = document.getElementById('htmlCode');
-            let css = generateCSS(timeline);
+            let css = generateCSS(timeline,mobile);
             cssCode.innerText = css[0];
             let cssEntries = css[1];
             //generate HTML for elements
-            let tempRows = calculateTemplateRows(timeline.numMonths);
-            let timelineCSS = makeTimelineCSS(tempRows);
-            let barCSS = makeBarCSS();
+            let tempRows = calculateTemplateRows(timeline.maxRow);
+            let timelineCSS = makeTimelineCSS(tempRows,mobile);
+            let barCSS = makeBarCSS(timeline.numMonths,mobile);
             let htmlString = `<div class="timeline" id="timeline" style="${timelineCSS}"><div class="bar" style="${barCSS}"></div>`;
             let outputHTML = '<div class="timeline" id="timeline"><div class="bar"></div>';
 
@@ -217,18 +235,18 @@
                 timeline.addEntry(new TimeElement(new Date(time), content));
             }
             timeline.sort();
-            generateTimeline(timeline);
+            generateTimeline(timeline,false);
         }
         function loaded(){
             let timeline = new Timeline();
              timeline.addEntry(new TimeElement(new Date('04/01/2020'),'a'));
-            // timeline.addEntry(new TimeElement(new Date('3/12/2018'),'a'));
+             timeline.addEntry(new TimeElement(new Date('3/12/2018'),'a'));
              timeline.addEntry(new TimeElement(new Date('01/12/2020'),'a'));
-            // timeline.addEntry(new TimeElement(new Date('1/22/2018'),'a'));
+             timeline.addEntry(new TimeElement(new Date('1/22/2018'),'a'));
             timeline.addEntry(new TimeElement(new Date('2/22/2019'),'a'));
-            
+            timeline.calculatePositions();
 
-             generateTimeline(timeline);
+              generateTimeline(timeline);
             // let a = new Date('1/22/2020');
             // let b = new Date('2/21/2019');
             // let c = new Date('07/08/2018');
