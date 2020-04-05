@@ -136,7 +136,7 @@
                               grid-row:${rowPos};\n
                               background:black;\n
                               align-self:center;\n
-                              height: 33%;\n
+                              height: 10%;\n
                                 border-radius: 10px;\n`;
                 let innerCSS = `text-align:${alignment};\n
                             padding:10;\n
@@ -156,8 +156,8 @@
             let htmlCode = document.getElementById('htmlCode');
             let css = generateCSS(timeline,mobile);
             let mobileCSS = generateCSS(timeline,true);
-            console.log(mobileCSS);
-            cssCode.innerText = css[0];
+            let mediaQuery = `@media(max-width:960px){${mobileCSS}}`;
+            cssCode.innerText = css[0]+mediaQuery;
             let cssEntries = css[1];
             let dotEntries = css[2];
             //generate HTML for elements
