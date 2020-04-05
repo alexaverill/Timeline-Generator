@@ -59,8 +59,8 @@
                     //remove the extra space that is added so that the last month is the first entry on the timeline.
                     monthNumber-=lastMonth;
                     //adding one so that the timeline doesn't end at the same point as the last item.
-                    this.maxRow = monthNumber>this.maxRow ? monthNumber+1: this.maxRow;
-                    this.entries[x].position = monthNumber;
+                    this.maxRow = monthNumber>this.maxRow ? monthNumber+2: this.maxRow;
+                    this.entries[x].position = monthNumber+1;
                     //console.log(month +" "+year+" : "+monthNumber+" "+lastMonth);
                     
                 }
@@ -89,7 +89,7 @@
                 gridCol = "1/2"
             }
             let barCSS = `grid-column: ${gridCol};
-                          grid-row: 1/${numberMonths+1};
+                          grid-row: 1/${numberMonths+2};
                           border-radius: 10px;
                           background-color: #49a078;`;
             return barCSS;
@@ -113,6 +113,7 @@
             let cssString = `.timeline{\n${timelineCSS}}\n;
                              .bar{${barCSS}\n} \n`;
             let cssEntries = [];
+            let dotCSS = [];
             let newestYear = timeline.entries[timeline.entries.length-1].date.getFullYear();
             for(let x = 0 ; x< timeline.entries.length; x++){
 
@@ -127,14 +128,26 @@
                     colPos = "2/3";
                     alignment="left";
                 }
+                let dotCol = '2/3';
+                if(mobile){
+                    dotCol = '1/2';
+                }
+                let dot = `grid-column:${dotCol};\n
+                              grid-row:${rowPos};\n
+                              background:black;\n
+                              align-self:center;\n
+                              height: 33%;\n
+                                border-radius: 10px;\n`;
                 let innerCSS = `text-align:${alignment};\n
-                            adding:10;\n
+                            padding:10;\n
                             grid-column:${colPos };\n
-                            grid-row:${rowPos};\n`;
+                            grid-row:${rowPos};\n
+                            align-self:center;\n`;
                 cssEntries.push(innerCSS);
-                cssString += `.t${x + 1}{\n${innerCSS}}\n`;
+                dotCSS.push(dot);
+                cssString += `.t${x + 1}{\n${innerCSS}}\n.d${x+1}{\n${dot}\n}\n`;
             }
-            return [cssString,cssEntries];
+            return [cssString,cssEntries,dotCSS];
         }
         //TODO maybe refactor.
         function generateTimeline(timeline,mobile=false) {
@@ -142,8 +155,11 @@
             let cssCode = document.getElementById('cssCode');
             let htmlCode = document.getElementById('htmlCode');
             let css = generateCSS(timeline,mobile);
+            let mobileCSS = generateCSS(timeline,true);
+            console.log(mobileCSS);
             cssCode.innerText = css[0];
             let cssEntries = css[1];
+            let dotEntries = css[2];
             //generate HTML for elements
             let tempRows = calculateTemplateRows(timeline.maxRow);
             let timelineCSS = makeTimelineCSS(tempRows,mobile);
@@ -152,11 +168,11 @@
             let outputHTML = '<div class="timeline" id="timeline"><div class="bar"></div>';
 
             for (let x = 0; x < timeline.entries.length; x++) {
-                let templatedString = `<div class="t${x + 1}" style="${cssEntries[x]}">
+                let templatedString = `<div class="d${x+1}" style="${dotEntries[x]}"></div><div class="t${x + 1}" style="${cssEntries[x]}">
                                         <div class="timelineDate">${timeline.entries[x].date.toLocaleDateString("en-US")}</div>
                                         <div class="timelineContent">${timeline.entries[x].content}</div>
                                       </div>`;
-                let outputString = `<div class="t${x + 1}>
+                let outputString = `<div class="d${x+1}></div><div class="t${x + 1}>
                                         <div class="timelineDate">${timeline.entries[x].date.toLocaleDateString("en-US")}</div>
                                         <div class="timelineContent">${timeline.entries[x].content}</div>
                                       </div>`;
