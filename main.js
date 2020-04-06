@@ -240,7 +240,9 @@
                 let time = inputs[0].value;
                 let content = inputs[1].value;
                 console.log(time);
-                timeline.addEntry(new TimeElement(new Date(time), content));
+                if(time !=null && time != undefined){
+                    timeline.addEntry(new TimeElement(new Date(time), content));
+                }
             }
             timeline.sort();
             generateTimeline(timeline,false);
